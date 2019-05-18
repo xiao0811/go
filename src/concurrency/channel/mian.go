@@ -1,15 +1,17 @@
 package main
 
+import "fmt"
+
 func main() {
 	done := make(chan struct{})
 	c := make(chan string)
 
 	go func() {
 		s := <-c
-		println(s)
+		fmt.Println(s)
 		close(done)
 	}()
 
-	c <- "Hi!"
+	c <- "nibaba"
 	<-done
 }

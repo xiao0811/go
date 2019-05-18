@@ -3,3 +3,4 @@ pkg
 src/github.com
 .DS_Store
 .idea
+src/gopkg.in
