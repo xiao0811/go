@@ -13,18 +13,24 @@ type Block struct {
 	Data          []byte // 区块包含的数据
 	PrevBlockHash []byte // 前一个区块的哈希值
 	Hash          []byte // 区块自身的哈希值, 用于校验区块数据有效
+	Nonce         int
 }
 
 // NewBlock creates and returns Block
 // 初始化创建一个新区块
 func NewBlock(data string, prevBlockHash []byte) *Block {
-	block := &Block{time.Now().Unix(), []byte(data), prevBlockHash, []byte{}}
-	block.SetHash()
+	block := &Block{time.Now().Unix(), []byte(data), prevBlockHash, []byte{}, 0}
+	pow := NewProofOfWork(block)
+	nonce, hash := pow.Run()
+
+	block.Hash = hash[:]
+	block.Nonce = nonce
+
 	return block
 }
 
 // SetHash calculates and sets block hash
-func (b *Block)SetHash() {
+func (b *Block) SetHash() {
 	timestamp := []byte(strconv.FormatInt(b.Timestamp, 10))
 	headers := bytes.Join([][]byte{b.PrevBlockHash, b.Data, timestamp}, []byte{})
 	hash := sha256.Sum256(headers)
