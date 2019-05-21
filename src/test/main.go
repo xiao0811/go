@@ -6,6 +6,8 @@ import (
 )
 
 func main() {
-	pas := sha256.Sum256([]byte("panxiao"))
-	fmt.Printf("%x", pas)
+	hash := sha256.Sum256([]byte("xiaosha"))
+	res := fmt.Sprintf("%x", hash)
+
+	fmt.Println(res)
 }
