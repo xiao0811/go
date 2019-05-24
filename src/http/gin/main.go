@@ -1,27 +1,52 @@
 package main
 
-import "github.com/kataras/iris"
+import "fmt"
 
 func main() {
-	//app := gin.New()
-	//app.Use(gin.Logger())
-	//app.GET("/xiaosha", func(context *gin.Context) {
-	//	context.JSON(200, gin.H{
-	//		"name": "xiaosha",
-	//		"age": 20,
-	//	})
-	//})
-	//app.Run()
-
-	app := iris.New()
-	app.Logger()
-
-	app.Get("/xiaosha", func(context iris.Context) {
-		_, _ = context.JSON(iris.Map{
-			"name": "xiaosha",
-			"age": 20,
-		})
+	map1 := make(map[string]struct{
+		Name string
+		Age int
 	})
 
-	app.Run(iris.Addr(":8080"))
+	map1["aa"] = struct {
+		Name string
+		Age  int
+	}{Name: "xiaosha", Age: 20}
+
+	fmt.Println(map1)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
