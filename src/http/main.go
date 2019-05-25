@@ -8,5 +8,5 @@ import (
 func main() {
 	app := router.InitRoute()
 
-	app.Run(iris.Addr(":9999/**/"))
+	app.Run(iris.Addr(":9999"))
 }

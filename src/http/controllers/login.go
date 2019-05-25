@@ -9,7 +9,7 @@ import (
 )
 
 func Index(ctx iris.Context) {
-	ctx.HTML("<p>xiaosha</p>")
+	ctx.HTML(handlers.NewUUID())
 }
 
 func Login(ctx iris.Context) {
