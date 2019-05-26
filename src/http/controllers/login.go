@@ -46,7 +46,8 @@ func Login(ctx iris.Context) {
 }
 
 func GetUser(ctx iris.Context) {
-	userInfo := ctx.Values().Get("userInfo")
+	userMsg := ctx.Values().Get("jwt").(*jwt.Token)
+	userInfo := userMsg.Claims.(jwt.MapClaims)
 	ctx.JSON(iris.Map{
 		"status":  http.StatusOK,
 		"message": "成功",

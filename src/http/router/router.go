@@ -18,7 +18,6 @@ func InitRoute() *iris.Application {
 		ValidationKeyGetter: func(token *jwt.Token) (i interface{}, e error) {
 			return []byte(handlers.ValidationKeyGetter), nil
 		},
-
 		SigningMethod: jwt.SigningMethodHS256,
 	})
 
@@ -27,6 +26,6 @@ func InitRoute() *iris.Application {
 	// 刷新 token
 	app.Get("/refreshToken", controllers.RefreshToken)
 
-	app.Get("/user", handlers.Checkjwt, controllers.GetUser)
+	app.Get("/user", controllers.GetUser)
 	return app
 }

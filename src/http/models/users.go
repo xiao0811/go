@@ -9,6 +9,7 @@ type User struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Role     int8   `json:"role"`
+	TokenUUID string `json:"token_uuid"`
 }
 
 func (user *User) GetUser() {
@@ -17,4 +18,8 @@ func (user *User) GetUser() {
 
 func (user *User) CreateUser() {
 	database.Eloquent.Create(user)
+}
+
+func (user *User) UpdateUser(key, value string) {
+	database.Eloquent.Model(user).Update(key, value)
 }
