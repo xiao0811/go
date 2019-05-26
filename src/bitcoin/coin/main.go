@@ -2,24 +2,12 @@ package main
 
 import (
 	"bitcoin/core"
-	"fmt"
-	"strconv"
 )
 
 func main() {
-	bc := core.NewBlockChain() // 初始化区块链, 创建第一个区块(创世纪区块)
+	bc := core.NewBlockChain()
+	defer bc.Db.Close()
 
-	bc.AddBlock("Send 1 BTC to Ivan")      // 加入一个区块, 发送一个比特币给Ivan
-	bc.AddBlock("Send 2 more BTC to Ivan") // 加入一个区块, 发送更多比特币给Ivan
-
-	for _, block := range bc.Blocks {
-		fmt.Printf("Prev.hash: %x\n", block.PrevBlockHash)
-		fmt.Printf("Data: %s\n", block.Data)
-		fmt.Printf("Hash: %x\n", block.Hash)
-		fmt.Println()
-
-		pow := core.NewProofOfWork(block)
-		fmt.Printf("Pow: %s\n", strconv.FormatBool(pow.Validate()))
-		fmt.Println()
-	}
+	cli := core.CLI{Bc:bc}
+	cli.Run()
 }
