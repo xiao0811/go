@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bitcoin/core"
+	"bitcoinv1/core"
 )
 
 func main() {

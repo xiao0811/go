@@ -17,8 +17,8 @@ func NewToken(username string, id int) string {
 		"iss":      "Xiaosha",
 		"iat":      time.Now().Unix(),
 		"jti":      uuid,
-		"exp":      time.Now().Add(10 * time.Hour * time.Duration(1)).Unix(),
-		//"exp": time.Now().Add(time.Second * 20 * time.Duration(1)).Unix(),
+		//"exp":      time.Now().Add(10 * time.Hour * time.Duration(1)).Unix(),
+		"exp":      time.Now().Add(1 * time.Hour * time.Duration(1)).Unix(),
 	})
 	// 如果要限制登录 把UUID放入用户表中  再和表中token_uuid 对比
 	user.TokenUUID = uuid
