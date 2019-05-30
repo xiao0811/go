@@ -6,6 +6,7 @@ import (
 	"github.com/kataras/iris"
 	"http/controllers"
 	"http/handlers"
+	"net/http"
 )
 
 func InitRoute() *iris.Application {
@@ -19,6 +20,13 @@ func InitRoute() *iris.Application {
 			return []byte(handlers.ValidationKeyGetter), nil
 		},
 		SigningMethod: jwt.SigningMethodHS256,
+		ErrorHandler: func(context iris.Context, s string) {
+			context.StatusCode(http.StatusUnauthorized)
+			context.JSON(iris.Map{
+				"status" : 401,
+				"message": "token失效或未登录",
+			})
+		},
 	})
 
 	app.Use(jwtHandler.Serve)
