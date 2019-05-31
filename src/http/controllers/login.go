@@ -6,6 +6,7 @@ import (
 	"http/handlers"
 	"http/models"
 	"net/http"
+	"strings"
 )
 
 func Index(ctx iris.Context) {
@@ -91,14 +92,46 @@ func CreateUser(ctx iris.Context) {
 }
 
 func RefreshToken(ctx iris.Context) {
-	userInfo := ctx.Values().Get("jwt").(*jwt.Token).Claims.(jwt.MapClaims)
-	username := userInfo["username"].(string)
-	userId := int(userInfo["id"].(float64))
+	authHeader := ctx.GetHeader("Authorization")
+	if authHeader == "" {
+		ctx.StatusCode(http.StatusUnauthorized)
+		ctx.JSON(iris.Map{
+			"status":  http.StatusUnauthorized,
+			"message": "没有token",
+		})
+		return
+	}
 
-	token := handlers.NewToken(username, userId)
+	// TODO: Make this a bit more robust, parsing-wise
+	authHeaderParts := strings.Split(authHeader, " ")
+	if len(authHeaderParts) != 2 || strings.ToLower(authHeaderParts[0]) != "bearer" {
+		ctx.StatusCode(http.StatusUnauthorized)
+		ctx.JSON(iris.Map{
+			"status":  http.StatusUnauthorized,
+			"message": "Authorization header format must be Bearer {token}",
+		})
+		return
+	}
+
+	//fmt.Println(authHeaderParts[1])
+	parsedToken, _ := jwt.Parse(authHeaderParts[1], func(token *jwt.Token) (i interface{}, e error) {
+		return []byte(handlers.ValidationKeyGetter), nil
+	})
+
+	//fmt.Println(parsedToken.Claims)
+	//fmt.Println(parsedToken.Claims)
+	data := parsedToken.Claims.(jwt.MapClaims)
+	if data["username"] == nil {
+		ctx.StatusCode(http.StatusUnauthorized)
+		ctx.JSON(iris.Map{
+			"status":  http.StatusUnauthorized,
+			"message": "Toke is error",
+		})
+		return
+	}
+	token := handlers.NewToken(data["username"].(string), int(data["id"].(float64)))
 	ctx.JSON(iris.Map{
-		"status":  http.StatusOK,
-		"message": "成功",
-		"token":   token,
+		"status": http.StatusOK,
+		"token":  token,
 	})
 }
