@@ -113,15 +113,31 @@ func RefreshToken(ctx iris.Context) {
 		return
 	}
 
-	//fmt.Println(authHeaderParts[1])
+
 	parsedToken, _ := jwt.Parse(authHeaderParts[1], func(token *jwt.Token) (i interface{}, e error) {
 		return []byte(handlers.ValidationKeyGetter), nil
 	})
 
-	//fmt.Println(parsedToken.Claims)
-	//fmt.Println(parsedToken.Claims)
 	data := parsedToken.Claims.(jwt.MapClaims)
 	if data["username"] == nil {
+		ctx.StatusCode(http.StatusUnauthorized)
+		ctx.JSON(iris.Map{
+			"status":  http.StatusUnauthorized,
+			"message": "Toke is error",
+		})
+		return
+	}
+
+	_token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"id":       data["id"],
+		"username": data["username"],
+		"iss":      data["iss"],
+		"iat":      data["iat"],
+		"jti":      data["jti"],
+		"exp":      data["exp"],
+	})
+	tokenString, _ := _token.SignedString([]byte(handlers.ValidationKeyGetter))
+	if "Bearer "+tokenString != authHeader {
 		ctx.StatusCode(http.StatusUnauthorized)
 		ctx.JSON(iris.Map{
 			"status":  http.StatusUnauthorized,
