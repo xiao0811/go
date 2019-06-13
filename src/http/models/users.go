@@ -5,10 +5,10 @@ import (
 )
 
 type User struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Role     int8   `json:"role"`
+	ID        int    `json:"id"`
+	Username  string `json:"username"`
+	Password  string `json:"password"`
+	Role      int8   `json:"role"`
 	TokenUUID string `json:"token_uuid"`
 }
 
