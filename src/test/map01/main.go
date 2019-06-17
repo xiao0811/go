@@ -3,13 +3,10 @@ package main
 import "fmt"
 
 func main() {
-	testMap := map[string]struct {
-		Name string `json:"name"`
-	}{
-		"xiaosha":  {"xiaosha"},
-		"xiaozang": {"xiaozang"},
-	}
+	slice := []int{10, 20, 30, 40}
 
-	name, exists := testMap["xiaozang"]
-	fmt.Println(name, exists)
+	for key, value := range slice {
+		fmt.Printf("Value: %d Value-Addr:%x ElemAddr:%x\n",
+			value, &value, &slice[key])
+	}
 }
