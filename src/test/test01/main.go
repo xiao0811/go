@@ -1,20 +1,25 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"os"
+	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
-func init() {
-	log.SetOutput(os.Stdout)
-}
-
 func main() {
-	fmt.Println("xiaosha")
-	xiaozang()
-}
+	app := gin.Default()
 
-func xiaozang()  {
-	fmt.Println("xiaozang")
+	app.GET("/", func(context *gin.Context) {
+		context.JSON(http.StatusOK, gin.H{
+			"name": "xiaosha",
+			"age":  20,
+		})
+	})
+	app.POST("/abc", func(context *gin.Context) {
+		name, _ := context.GetPostForm("name")
+		context.JSON(http.StatusOK, gin.H{
+			"abc": context.Query("abc"),
+			"bbb": name,
+		})
+	})
+	app.Run(":9090")
 }
